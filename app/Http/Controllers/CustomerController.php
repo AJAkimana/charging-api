@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoanAccount;
 use App\Models\OutputServerUser;
 use App\Models\User;
 use App\Traits\ServerResponse;
@@ -38,6 +39,13 @@ class CustomerController extends Controller
                 if ($customer->kyc) {
                     $response['action'] = 'continue';
                     $response['description'] = 'You are already registered';
+
+                    // Check the user if has a loan
+                    $userLoan = LoanAccount::where('user_id', $customer->id)->first();
+                    if($userLoan){
+                        $response['action'] = 'stop';
+                        $response['description'] = 'Come on, Finish the loan first';
+                    }
                 } else {
                     $response['action'] = 'request_kyc';
                     $response['description'] = 'Registration is not complete';
@@ -59,7 +67,13 @@ class CustomerController extends Controller
         }
     }
 
-    private function checkEligibility($userMsisdnNumber): array
+    /**
+     * A method that plays a role for OutputServer API
+     *
+     * @param $userMsisdnNumber string
+     * @return string[]
+     */
+    private function checkEligibility(string $userMsisdnNumber): array
     {
         $response = array(
             'status' => 'not_eligible',
