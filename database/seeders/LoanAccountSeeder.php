@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use App\Models\LoanAccount;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class LoanAccountSeeder extends Seeder
@@ -15,7 +15,7 @@ class LoanAccountSeeder extends Seeder
      */
     public function run()
     {
-        $customer = User::factory()->create();
+        $customer = Customer::factory()->create();
         LoanAccount::factory()->count(1)->for($customer)->create();
     }
 }

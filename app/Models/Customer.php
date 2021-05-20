@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class OutputServerUser extends Model
+class Customer extends Model
 {
     use HasFactory, Notifiable, Uuids;
 
@@ -17,7 +17,11 @@ class OutputServerUser extends Model
      * @var array
      */
     protected $fillable = [
+        'names',
         'msisdn',
-        'score',
+        'age',
+        'location',
+        'kyc',
+        'customer_status',
     ];
 }

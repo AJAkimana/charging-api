@@ -18,12 +18,12 @@ class LoanAccount extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'amount',
     ];
 
-    public function user(): BelongsTo
+    public function customer(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\OutputServerUser;
+use App\Models\MtnServerUser;
 use Illuminate\Database\Seeder;
 
-class OutputServerUserSeeder extends Seeder
+class MtnServerUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class OutputServerUserSeeder extends Seeder
      */
     public function run()
     {
-        OutputServerUser::factory()->count(10)->create();
+        MtnServerUser::factory()->count(50)->create();
     }
 }

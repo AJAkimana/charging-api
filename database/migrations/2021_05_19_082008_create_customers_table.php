@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLoanAccountsTable extends Migration
+class CreateCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateLoanAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('loan_accounts', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('customer_id')->unique();
-            $table->float('amount');
-            $table->foreign('customer_id')
-                ->references('id')->on('customers')
-                ->onDelete('cascade');
+            $table->string('names');
+            $table->string('msisdn')->unique();
+            $table->integer('age');
+            $table->string('location');
+            $table->string('kyc')->unique();
+            $table->string('customer_status')->default('pre_customer');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateLoanAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('loan_accounts');
+        Schema::dropIfExists('customers');
     }
 }

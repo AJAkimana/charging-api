@@ -16,7 +16,7 @@ class CreateOutputServerUsersTable extends Migration
         Schema::create('output_server_users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('msisdn')->unique();
-            $table->integer('age');
+            $table->integer('score');
             $table->timestamps();
         });
     }
