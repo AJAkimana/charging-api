@@ -15,12 +15,13 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('names');
+            $table->uuid('kyc_id')->unique();
             $table->string('msisdn')->unique();
-            $table->integer('age');
             $table->string('location');
-            $table->string('kyc')->unique();
             $table->string('customer_status')->default('pre_customer');
+            $table->foreign('kyc_id')
+                ->references('id')->on('kycs')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class MtnServerUser extends Model
+class Kyc extends Model
 {
     use HasFactory, Notifiable, Uuids;
 

@@ -24,11 +24,8 @@ class CustomerFactory extends Factory
     public function definition()
     {
         return [
-            'names' => $this->faker->name(),
             'msisdn' => $this->faker->unique()->phoneNumber,
-            'age' => rand(37, 80),
             'location' => $this->faker->randomElement(['Kigali', 'Musanze', 'Nyamasheke', 'Akagera']),
-            'kyc' => $this->faker->unique()->slug(3),
         ];
     }
 }

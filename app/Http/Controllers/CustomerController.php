@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Kyc;
 use App\Models\LoanAccount;
 use App\Models\MtnServerUser;
 use App\Models\OutputServerUser;
@@ -26,16 +27,16 @@ class CustomerController extends Controller
         }
         $msisdn_number = $request->input('msisdn_number');
         $message = 'Something went wrong, please try again';
+        $response = array(
+            'status' => 400,
+            'action' => 'stop',
+            'description' => $message
+        );
         try {
-            $response = array(
-                'status' => 'not_eligible',
-                'action' => 'stop',
-                'description' => 'Please try again'
-            );
             // Check if customer is registered
             $customer = Customer::where('msisdn', $msisdn_number)->first();
             if ($customer) {
-                $response['status'] = 'registered';
+                $response['status'] = 200;
                 $message = 'This customer is registered.';
                 $response['description'] = $message;
 
@@ -62,19 +63,21 @@ class CustomerController extends Controller
                     $response['accountStatus'] = 'active';
                     $response['loanStatus'] = 'pending';
                     $response['creditScore'] = $response['score'];
+
+                    $customerKyc = Kyc::create($mtnUser['user']->toArray());
                     Customer::create([
-                        'names' => $mtnUser['user']->names,
                         'msisdn' => $mtnUser['user']->phoneNumber,
-                        'age' => rand(35,80),
-                        'location' => $mtnUser['user']->location,
-                        'kyc' => $mtnUser['user']->kyc,
+                        'location' => $mtnUser['user']->address,
+                        'kyc_id' => $customerKyc->id,
                     ]);
                     $response['description'] = 'This customer is registered.';
                 }
             }
             $message = $response['description'];
+            $response['status'] == 200;
             return $this->res(200, $message, $response);
         } catch (Exception $error) {
+            $response['message'] = 'Something went wrong, please try again';
             return $this->res(500, $message, $error->getMessage());
         }
     }

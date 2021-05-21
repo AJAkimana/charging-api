@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\MtnServerUser;
+use App\Models\Kyc;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MtnServerUserFactory extends Factory
+class KycFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = MtnServerUser::class;
+    protected $model = Kyc::class;
 
     /**
      * Define the model's default state.

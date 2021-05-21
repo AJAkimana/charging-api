@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMtnServerUsersTable extends Migration
+class CreateKycsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMtnServerUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('mtn_server_users', function (Blueprint $table) {
+        Schema::create('kycs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('firstName');
             $table->string('lastName');
@@ -35,6 +35,6 @@ class CreateMtnServerUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mtn_server_users');
+        Schema::dropIfExists('kycs');
     }
 }

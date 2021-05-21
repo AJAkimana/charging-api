@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
 class Customer extends Model
@@ -17,11 +18,14 @@ class Customer extends Model
      * @var array
      */
     protected $fillable = [
-        'names',
         'msisdn',
-        'age',
         'location',
-        'kyc',
         'customer_status',
+        'kyc_id'
     ];
+
+    public function kyc(): BelongsTo
+    {
+        return $this->belongsTo(Kyc::class);
+    }
 }
