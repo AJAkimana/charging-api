@@ -93,6 +93,7 @@ class CustomerController extends Controller
      * Save a customer offer preference
      *
      * @param Request $request
+     * @param $msisdn
      * @return JsonResponse
      */
     public function saveCustomerOffer(Request $request, $msisdn): JsonResponse
@@ -115,6 +116,26 @@ class CustomerController extends Controller
         }
     }
 
+    /**
+     * Save a customer offer preference
+     *
+     * @param Request $request
+     * @param $msisdn
+     * @return JsonResponse
+     */
+    public function updateCustomerKyc(Request $request, $msisdn): JsonResponse
+    {
+        try {
+            $customer = Customer::where('msisdn', $msisdn)->first();
+            if ($customer) {
+                $customer->save();
+                return $this->res(200, "KYC updated", $customer);
+            }
+            return $this->res(404, 'The customer not found');
+        } catch (Exception $error) {
+            return $this->res(500, $error->getMessage());
+        }
+    }
     /**
      * A method that plays a role for OutputServer API
      *
