@@ -21,11 +21,16 @@ class Customer extends Model
         'msisdn',
         'location',
         'customer_status',
-        'kyc_id'
+        'kyc_id',
+        'offer_id',
     ];
 
     public function kyc(): BelongsTo
     {
         return $this->belongsTo(Kyc::class);
+    }
+    public function offer(): BelongsTo
+    {
+        return $this->belongsTo(Offer::class);
     }
 }

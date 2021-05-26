@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             OutputServerUserSeeder::class,
             LoanAccountSeeder::class,
             MtnServerUserSeeder::class,
+            OfferSeeder::class,
         ]);
     }
 }

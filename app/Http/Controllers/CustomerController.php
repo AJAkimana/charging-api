@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Kyc;
 use App\Models\LoanAccount;
 use App\Models\MtnServerUser;
+use App\Models\Offer;
 use App\Models\OutputServerUser;
 use App\Traits\ServerResponse;
 use Exception;
@@ -17,6 +18,12 @@ class CustomerController extends Controller
 {
     use ServerResponse;
 
+    /**
+     * A handler for checking a customer status and register a customer
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function checkCustomerStatus(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -81,6 +88,33 @@ class CustomerController extends Controller
             return $this->res(500, $message, $error->getMessage());
         }
     }
+
+    /**
+     * Save a customer offer preference
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveCustomerOffer(Request $request, $msisdn): JsonResponse
+    {
+        try {
+            $offer = Offer::find($request->input('offer_id'));
+            if (!$offer) {
+                return $this->res(400, 'We could not find your choice');
+            }
+            $customer = Customer::where('msisdn', $msisdn)->first();
+            if ($customer) {
+                $customer->offer_id = $request->input('offer_id');
+                $customer->save();
+                $customer->offer = $offer;
+                return $this->res(200, "Offer added, Please go to the service center to pick it up", $customer);
+            }
+            return $this->res(404, 'The customer not found');
+        } catch (Exception $error) {
+            return $this->res(500, $error->getMessage());
+        }
+    }
+
     /**
      * A method that plays a role for OutputServer API
      *
@@ -137,16 +171,13 @@ class CustomerController extends Controller
     /**
      * Mocked devices
      */
-    private function mockedDevices(int $nDevices = 3): array
+    private function mockedDevices(int $nDevices = 3)
     {
         $devices = array();
-        for ($i = 1; $i < $nDevices; $i++) {
-            $randNum = $i * rand(1, 3);
-            $devices[] = array(
-                'deviceName' => 'LG G' . $randNum,
-                'emiAmount' => array('amount' => rand(100, 999), 'currency' => 'usd'),
-            );
+        try {
+            return Offer::inRandomOrder()->limit($nDevices)->get();
+        } catch (Exception $error) {
+            return $devices;
         }
-        return $devices;
     }
 }
