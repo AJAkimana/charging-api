@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Kyc;
 use App\Models\LoanAccount;
 use App\Models\MtnServerUser;
+use App\Models\Offer;
 use App\Models\OutputServerUser;
 use App\Traits\ServerResponse;
 use Exception;
@@ -140,13 +141,10 @@ class CustomerController extends Controller
     private function mockedDevices(int $nDevices = 3): array
     {
         $devices = array();
-        for ($i = 1; $i < $nDevices; $i++) {
-            $randNum = $i * rand(1, 3);
-            $devices[] = array(
-                'deviceName' => 'LG G' . $randNum,
-                'emiAmount' => array('amount' => rand(100, 999), 'currency' => 'usd'),
-            );
+        try {
+            return Offer::inRandomOrder()->limit($nDevices)->get();
+        }catch (Exception $error){
+            return $devices;
         }
-        return $devices;
     }
 }
