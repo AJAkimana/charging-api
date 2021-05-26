@@ -21,9 +21,11 @@ class OfferFactory extends Factory
      */
     public function definition()
     {
+        $amount = rand(100, 900) * 1000;
         return [
             'name' => $this->faker->randomElement(['LG', 'Samsung', 'iPhone', 'Techno']),
-            'amount' => rand(100, 900) * 1000,
+            'amount' => $amount,
+            'initial_deposit' => $amount / 8,
             'currency' => $this->faker->randomElement(['RwF']),
             'required_score' => rand(35, 100),
         ];

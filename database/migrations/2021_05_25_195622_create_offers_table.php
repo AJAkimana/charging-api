@@ -17,6 +17,7 @@ class CreateOffersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->float('amount');
+            $table->float('initial_deposit');
             $table->string('currency');
             $table->float('required_score');
             $table->timestamps();

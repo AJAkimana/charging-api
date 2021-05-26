@@ -19,6 +19,7 @@ class Offer extends Model
     protected $fillable = [
         'name',
         'amount',
+        'initial_deposit',
         'currency',
         'required_score'
     ];
