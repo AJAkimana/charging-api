@@ -138,8 +138,8 @@ class CustomerController extends Controller
         }
         try {
             if ($request->hasFile('picture') && $request->hasFile('form')) {
-                $profilePath = $request->file('profile')->store('public');
-                $formPath = $request->file('form')->store('public');
+                $profilePath = $request->profile->store('public/profiles');
+                $formPath = $request->form->store('public/forms');
 
                 $customer = Customer::where('msisdn', $msisdn)->first();
                 if ($customer) {
