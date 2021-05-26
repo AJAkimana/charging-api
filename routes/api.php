@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MockController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/check/eligibility', 'MockController@checkEligibility');
-Route::post('/check/status', 'CustomerController@checkCustomerStatus');
+Route::post('/check/eligibility', [MockController::class, 'checkEligibility']);
+Route::post('/check/status', [CustomerController::class, 'checkCustomerStatus']);
+Route::post('/customer-offer/{msisdn}', [CustomerController::class, 'saveCustomerOffer']);
+
+// Not found
+Route::fallback(function (){
+    return abort(404);
+});
