@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Kyc;
 use App\Models\LoanAccount;
 use App\Models\MtnServerUser;
+use App\Models\NextOfKeen;
 use App\Models\Offer;
 use App\Models\OutputServerUser;
 use App\Traits\ServerResponse;
@@ -125,17 +126,44 @@ class CustomerController extends Controller
      */
     public function updateCustomerKyc(Request $request, $msisdn): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'picture' => 'required|mimes:png,jpg|max:2048',
+            'form' => 'required|mimes:pdf|max:2048',
+            'nextOfKinNames' => 'required',
+            'nextOfKinAddress' => 'required',
+            'nextOfKinIdNumber' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->res(400, $validator->errors()->first());
+        }
         try {
-            $customer = Customer::where('msisdn', $msisdn)->first();
-            if ($customer) {
-                $customer->save();
-                return $this->res(200, "KYC updated", $customer);
+            if ($request->hasFile('picture') && $request->hasFile('form')) {
+                $profilePath = $request->file('profile')->store('public');
+                $formPath = $request->file('form')->store('public');
+
+                $customer = Customer::where('msisdn', $msisdn)->first();
+                if ($customer) {
+                    $nextOfKin = NextOfKeen::create([
+                        'names'=>$request->input('nextOfKinNames'),
+                        'address'=>$request->input('nextOfKinAddress'),
+                        'id_number'=>$request->input('nextOfKinIdNumber')
+                    ]);
+                    $customer->next_of_kin_id = $nextOfKin->id;
+                    $customer->picture = $profilePath;
+                    $customer->application_form = $formPath;
+
+                    $customer->save();
+
+                    return $this->res(200, "KYC updated", $customer);
+                }
+                return $this->res(404, 'The customer not found');
             }
-            return $this->res(404, 'The customer not found');
+            return $this->res(400, 'No files uploaded');
         } catch (Exception $error) {
             return $this->res(500, $error->getMessage());
         }
     }
+
     /**
      * A method that plays a role for OutputServer API
      *
