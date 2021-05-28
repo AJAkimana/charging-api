@@ -121,6 +121,26 @@ class CustomerController extends Controller
      * Save a customer offer preference
      *
      * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCustomerDetails(Request $request): JsonResponse
+    {
+        try {
+            $customer = Customer::where('msisdn', $request->route('msisdn'))
+                ->with('kyc')->with('offer')->with('nextOfKin')
+                ->first();
+            if ($customer) {
+                return $this->res(200, "Success", $customer);
+            }
+            return $this->res(404, 'The customer not found');
+        } catch (Exception $error) {
+            return $this->res(500, $error->getMessage());
+        }
+    }
+    /**
+     * Save a customer offer preference
+     *
+     * @param Request $request
      * @param $msisdn
      * @return JsonResponse
      */
@@ -137,8 +157,8 @@ class CustomerController extends Controller
             return $this->res(400, $validator->errors()->first());
         }
         try {
-            $profilePath = $request->picture->store('public/profiles');
-            $formPath = $request->form->store('public/forms');
+            $profilePath = $request->picture->store('uploads/profiles');
+            $formPath = $request->form->store('uploads/forms');
 
             $customer = Customer::where('msisdn', $msisdn)->first();
             if ($customer){
