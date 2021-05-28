@@ -26,5 +26,5 @@ Route::post('/update-kyc/{msisdn}', [CustomerController::class, 'updateCustomerK
 Route::get('/customers/{msisdn}', [CustomerController::class, 'getCustomerDetails']);
 // Not found
 Route::fallback(function (){
-    return abort(404);
+    abort(404, 'Oops!!, You seem to have been lost');
 });
