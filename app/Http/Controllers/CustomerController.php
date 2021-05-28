@@ -137,28 +137,25 @@ class CustomerController extends Controller
             return $this->res(400, $validator->errors()->first());
         }
         try {
-            if ($request->hasFile('picture') && $request->hasFile('form')) {
-                $profilePath = $request->profile->store('public/profiles');
-                $formPath = $request->form->store('public/forms');
+            $profilePath = $request->picture->store('public/profiles');
+            $formPath = $request->form->store('public/forms');
 
-                $customer = Customer::where('msisdn', $msisdn)->first();
-                if ($customer) {
-                    $nextOfKin = NextOfKeen::create([
-                        'names'=>$request->input('nextOfKinNames'),
-                        'address'=>$request->input('nextOfKinAddress'),
-                        'id_number'=>$request->input('nextOfKinIdNumber')
-                    ]);
-                    $customer->next_of_kin_id = $nextOfKin->id;
-                    $customer->picture = $profilePath;
-                    $customer->application_form = $formPath;
+            $customer = Customer::where('msisdn', $msisdn)->first();
+            if ($customer){
+                $nextOfKin = NextOfKeen::firstOrCreate([
+                    'names' => $request->input('nextOfKinNames'),
+                    'address' => $request->input('nextOfKinAddress'),
+                    'id_number' => $request->input('nextOfKinIdNumber')
+                ]);
+                $customer->next_of_kin_id = $nextOfKin->id;
+                $customer->picture = $profilePath;
+                $customer->application_form = $formPath;
 
-                    $customer->save();
+                $customer->save();
 
-                    return $this->res(200, "KYC updated", $customer);
-                }
-                return $this->res(404, 'The customer not found');
+                return $this->res(200, "KYC updated", $customer);
             }
-            return $this->res(400, 'No files uploaded');
+            return $this->res(400, 'User not found');
         } catch (Exception $error) {
             return $this->res(500, $error->getMessage());
         }
