@@ -9,6 +9,7 @@ use App\Models\MtnServerUser;
 use App\Models\NextOfKeen;
 use App\Models\Offer;
 use App\Models\OutputServerUser;
+use App\Traits\InstallmentHelper;
 use App\Traits\ServerResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
-    use ServerResponse;
+    use InstallmentHelper, ServerResponse;
 
     /**
      * A handler for checking a customer status and register a customer
