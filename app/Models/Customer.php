@@ -23,6 +23,9 @@ class Customer extends Model
         'customer_status',
         'kyc_id',
         'offer_id',
+        'picture',
+        'application_form',
+        'next_of_kin_id',
     ];
 
     public function kyc(): BelongsTo
@@ -32,5 +35,9 @@ class Customer extends Model
     public function offer(): BelongsTo
     {
         return $this->belongsTo(Offer::class);
+    }
+    public function nextOfKin(): BelongsTo
+    {
+        return $this->belongsTo(NextOfKeen::class);
     }
 }

@@ -22,8 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/check/eligibility', [MockController::class, 'checkEligibility']);
 Route::post('/check/status', [CustomerController::class, 'checkCustomerStatus']);
 Route::post('/customer-offer/{msisdn}', [CustomerController::class, 'saveCustomerOffer']);
-
+Route::post('/update-kyc/{msisdn}', [CustomerController::class, 'updateCustomerKyc']);
+Route::get('/customers/{msisdn}', [CustomerController::class, 'getCustomerDetails']);
 // Not found
 Route::fallback(function (){
-    return abort(404);
+    abort(404, 'Oops!!, You seem to have been lost');
 });
