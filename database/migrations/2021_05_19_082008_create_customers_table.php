@@ -23,6 +23,10 @@ class CreateCustomersTable extends Migration
             $table->string('customer_status')->default('pre_customer');
             $table->string('picture')->nullable();
             $table->string('application_form')->nullable();
+            $table->string('loan_status')->default('pending');
+            $table->date('monthversary_date')->nullable();
+            $table->string('installment_period')->nullable();
+            $table->float('installment_amount')->nullable();
             $table->foreign('kyc_id')
                 ->references('id')->on('kycs')
                 ->onDelete('cascade');
