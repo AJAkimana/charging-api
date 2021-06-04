@@ -50,7 +50,6 @@ trait InstallmentHelper
                 ->groupBy('customer_id')
                 ->first();
 
-//            dd($installmentsSum);
             $amountPaid = $installmentsSum->amount + $installmentsSum->added_amount;
             $amountNotPaid = $installmentsSum->amount_not_paid;
             if ($amountPaid - $amountNotPaid + $postedAmount >= $amountTobePaid) {
@@ -63,7 +62,9 @@ trait InstallmentHelper
                 }
             } else {
                 // Devide amount into 3: amount tobe paid, not paid, and added
-                $aggAmount['amount'] = $postedAmount > $customer->installment_amount ? $customer->installment_amount : 0;
+                $aggAmount['amount'] = $postedAmount > $customer->installment_amount ? $customer->installment_amount : $postedAmount;
+                $aggAmount['added_amount'] = $postedAmount > $customer->installment_amount ? $postedAmount - $customer->installment_amount : 0;
+                $aggAmount['amount_not_paid'] = $postedAmount < $customer->installment_amount ?  $customer->installment_amount - $postedAmount : 0;
             }
             return $aggAmount;
         } catch (Exception $error) {

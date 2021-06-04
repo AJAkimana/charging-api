@@ -32,6 +32,9 @@ class Customer extends Model
         'installment_period',
         'installment_amount'
     ];
+    private mixed $installment_amount;
+    private mixed $offer;
+    private mixed $id;
 
     public function kyc(): BelongsTo
     {

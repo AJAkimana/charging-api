@@ -61,7 +61,7 @@ class InstallmentController extends Controller
     }
 
     /**
-     * Add the first payment of an offer
+     * Pay an installment
      *
      * @param Request $request
      * @return JsonResponse
@@ -74,7 +74,7 @@ class InstallmentController extends Controller
             return $this->res(400, $validator->errors()->first());
         $msisdnNumber = $request->route('msisdn');
         try{
-            $customer = Customer::where('msisdn', $msisdnNumber)->with('offer:id,initial_deposit')->first();
+            $customer = Customer::where('msisdn', $msisdnNumber)->with('offer:id,amount,initial_deposit')->first();
             if(!$customer)
                 return $this->res(400, 'Customer not found');
             if($customer->loan_status  === 'active'){
@@ -83,8 +83,19 @@ class InstallmentController extends Controller
                  * the update the customer on successful response
                  */
                 $installMent = $this->aggregatedAmount($customer, $request->input('amount'));
-                dd($installMent);
-                return $this->res(200, 'Success');
+                InstallmentPaid::create([
+                    'amount' => $installMent['amount'],
+                    'amount_not_paid' => $installMent['amount_not_paid'],
+                    'added_amount' => $installMent['added_amount'],
+                    'customer_id' => $customer->id
+                ]);
+                // if the payment is the last change the customer statuses
+                if($installMent['is_last']){
+                    $customer->loan_status = 'completed';
+                    $customer->customer_status = 'post_customer';
+                    $customer->save();
+                }
+                return $this->res(200, 'Success', $installMent);
             }
             return $this->res(404, 'The customer has to be active');
         }catch(Exception $error){
