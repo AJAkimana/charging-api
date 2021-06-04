@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Customer;
-use App\Traits\ServerResponse;
+use App\Traits\InstallmentHelper;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadCustomerFiles
 {
-    use ServerResponse;
+    use InstallmentHelper;
     /**
      * Handle an incoming request.
      *

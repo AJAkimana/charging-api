@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\OutputServerUser;
-use App\Traits\ServerResponse;
+use App\Traits\InstallmentHelper;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MockController extends Controller
 {
-    use ServerResponse;
+    use InstallmentHelper;
 
     public function checkEligibility(Request $request): JsonResponse {
         $status = 'not_eligible';
